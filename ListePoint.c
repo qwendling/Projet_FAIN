@@ -47,6 +47,6 @@ void draw_liste_aux(ListePoint l,ListePoint first,Image* img){
 void draw_liste(ListePoint l,Image* img){
   if(l==NULL || l->next == NULL)
     return;
-    I_bresenham(img,l->x,l->y,l->next->x,l->next->y);
-    draw_liste_aux(l->next,l,img);
+  I_bresenham(img,l->x,l->y,l->next->x,l->next->y);
+  draw_liste_aux(l->next,l,img);
 }

@@ -22,6 +22,7 @@
 
 Image *img;
 ListePoint lp;
+int _HauteurImg;
 
 
 int compareColor(Color c1,Color c2){
@@ -72,7 +73,9 @@ void mouse_CB(int button, int state, int x, int y)
 {
 	if((button==GLUT_LEFT_BUTTON)&&(state==GLUT_DOWN))
 		I_focusPoint(img,x,img->_height-y);
-
+	if((button==GLUT_LEFT_BUTTON)&&(state==GLUT_DOWN)){
+		lp = add_point(lp,x,_HauteurImg-y);
+	}
 	glutPostRedisplay();
 }
 
@@ -146,6 +149,9 @@ int main(int argc, char **argv)
 			Color blanc = C_new(200,200,255);
 			I_checker(img,rouge,blanc,50);
 		}
+
+		_HauteurImg = img->_height;
+
 		lp=new_listepoint();
 
 		lp = add_point(lp,0,0);

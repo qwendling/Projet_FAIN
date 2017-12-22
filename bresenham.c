@@ -29,6 +29,11 @@ void I_bresenhamOrigin(Image *img,int x,int y){
 }
 
 void Z2to1O(int xA,int yA,int xB,int yB,int* OxA,int* OyA,int* OxB,int* OyB){
+	xB=xB-xA;
+	yB=yB-yA;
+	xA=0;
+	yA=0;
+
 	int dx = xB - xA;
 	int dy = yB - yA;
 	if(dx<0){
@@ -55,18 +60,20 @@ void Z2to1O(int xA,int yA,int xB,int yB,int* OxA,int* OyA,int* OxB,int* OyB){
 void O1toZ2(int xA,int yA,int xB,int yB,int* x,int* y){
 	int dx = xB-xA;
 	int dy = yB-yA;
+	if(abs(dx) < abs(dy)){
+		int tmp=*x;
+		*x=*y;
+		*y=tmp;
+	}
 	if(dy<0){
 		*y=-(*y);
 	}
 	if(dx<0){
 		*x=-(*x);
 	}
-	if(dx<dy){
-		int tmp=*x;
-		*x=*y;
-		*y=tmp;
-	}
 
+	*x += xA;
+	*y += yA;
 }
 
 void I_bresenham(Image* img, int xA, int yA, int xB, int yB){
