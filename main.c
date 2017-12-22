@@ -17,124 +17,13 @@
 #include <GL/gl.h>
 
 #include "Image.h"
+#include "bresenham.h"
 
 Image *img;
 
 int compareColor(Color c1,Color c2){
 	return (c1._red == c2._red) && (c1._green == c2._green) && (c1._blue == c2._blue);
 }
-
-void I_bresenhamOrigin(Image *img,int x,int y){
-
-	Color blanc;
-	blanc._red = 255;
-	blanc._green = 255;
-	blanc._blue = 255;
-	I_changeColor(img,blanc);
-
-	int incrd1 = 2*y;
-	int incrd2 = 2*(y-x);
-
-	int tmpx=0,tmpy=0;
-	int d=2*y-x;
-
-	while(tmpx<x){
-		I_plot(img,tmpx,tmpy);
-		tmpx++;
-		if(d<0){
-			d+=incrd1;
-		}else{
-			tmpy++;
-			d+=incrd2;
-		}
-	}
-
-
-}
-
-void Z2to1O(int xA,int yA,int xB,int yB,int* OxA,int* OyA,int* OxB,int* OyB){
-	int dx = xB - xA;
-	int dy = yB - yA;
-	if(dx<0){
-		xA = -xA;
-		xB = -xB;
-	}
-	if(dy<0){
-		yA = -yA;
-		yB = -yB;
-	}
-	if(abs(dx) < abs(dy)){
-		*OxA=yA;
-		*OyA=xA;
-		*OxB=yB;
-		*OyB=xB;
-		return;
-	}
-	*OxA=xA;
-	*OyA=yA;
-	*OxB=xB;
-	*OyB=yB;
-}
-
-void O1toZ2(int xA,int yA,int xB,int yB,int* x,int* y){
-	int dx = xB-xA;
-	int dy = yB-yA;
-	if(dy<0){
-		*y=-(*y);
-	}
-	if(dx<0){
-		*x=-(*x);
-	}
-	if(dx<dy){
-		int tmp=*x;
-		*x=*y;
-		*y=tmp;
-	}
-
-}
-
-void I_bresenham(Image* img, int xA, int yA, int xB, int yB){
-	Color blanc;
-	blanc._red = 255;
-	blanc._green = 255;
-	blanc._blue = 255;
-	I_changeColor(img,blanc);
-
-	int OxA,OyA,OxB,OyB;
-
-	Z2to1O(xA,yA,xB,yB,&OxA,&OyA,&OxB,&OyB);
-	int dx = OxB-OxA;
-	int dy = OyB-OyA;
-
-	int incrd1 = 2*dy;
-	int incrd2 = 2*(dy-dx);
-
-	int tmpx=OxA,tmpy=OyA;
-	int d=2*dy-dx;
-	int x,y;
-
-	while(tmpx<OxB){
-		x=tmpx;
-		y=tmpy;
-		O1toZ2(xA,yA,xB,yB,&x,&y);
-		I_plot(img,x,y);
-		tmpx++;
-		if(d<0){
-			d+=incrd1;
-		}else{
-			tmpy++;
-			d+=incrd2;
-		}
-	}
-	x=tmpx;
-	y=tmpy;
-	O1toZ2(xA,yA,xB,yB,&x,&y);
-	I_plot(img,x,y);
-}
-
-
-
-
 
 
 //------------------------------------------------------------------
