@@ -23,6 +23,7 @@
 Image *img;
 ListePoint lp;
 int _HauteurImg;
+bool est_ferme = false;
 
 
 int compareColor(Color c1,Color c2){
@@ -52,7 +53,7 @@ void display_CB()
 	/*I_bresenham(img,150,150,0,0);
 	I_bresenham(img,50,150,25,25);*/
 
-	draw_liste(lp,img);
+	draw_liste(lp,img,est_ferme);
 
 	I_draw(img);
 
@@ -93,6 +94,7 @@ void keyboard_CB(unsigned char key, int x, int y)
 	case 'z' : I_zoom(img,2.0); break;
 	case 'Z' : I_zoom(img,0.5); break;
 	case 'i' : I_zoomInit(img); break;
+	case 'c' : est_ferme = !est_ferme; break;
 	default : fprintf(stderr,"keyboard_CB : %d : unknown key.\n",key);
 	}
 	glutPostRedisplay();

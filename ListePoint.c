@@ -37,16 +37,24 @@ void free_liste(ListePoint l){
   free(l);
 }
 
-void draw_liste_aux(ListePoint l,ListePoint first,Image* img){
-  if(l==NULL || l->next == NULL || (l->x == first->x && l->y == first->y))
+void draw_liste_aux(ListePoint l,ListePoint first,Image* img,bool ferme){
+
+  if(l==NULL || (l->x == first->x && l->y == first->y))
     return;
+
+  if(l->next == NULL){
+    if(ferme)
+      I_bresenham(img,l->x,l->y,first->x,first->y);
+    return;
+  }
+
   I_bresenham(img,l->x,l->y,l->next->x,l->next->y);
-  draw_liste_aux(l->next,first,img);
+  draw_liste_aux(l->next,first,img,ferme);
 }
 
-void draw_liste(ListePoint l,Image* img){
+void draw_liste(ListePoint l,Image* img,bool ferme){
   if(l==NULL || l->next == NULL)
     return;
   I_bresenham(img,l->x,l->y,l->next->x,l->next->y);
-  draw_liste_aux(l->next,l,img);
+  draw_liste_aux(l->next,l,img,ferme);
 }
