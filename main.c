@@ -18,8 +18,11 @@
 
 #include "Image.h"
 #include "bresenham.h"
+#include "ListePoint.h"
 
 Image *img;
+ListePoint lp;
+
 
 int compareColor(Color c1,Color c2){
 	return (c1._red == c2._red) && (c1._green == c2._green) && (c1._blue == c2._blue);
@@ -45,8 +48,11 @@ void display_CB()
 	//I_bresenhamOrigin(img,100,100);
 	//I_bresenham(img,25,25,150,50);
 	//I_bresenham(img,25,25,150,150);
-	I_bresenham(img,150,150,0,0);
-	I_bresenham(img,50,150,25,25);
+	/*I_bresenham(img,150,150,0,0);
+	I_bresenham(img,50,150,25,25);*/
+
+	draw_liste(lp,img);
+
 	I_draw(img);
 
     glutSwapBuffers();
@@ -140,6 +146,16 @@ int main(int argc, char **argv)
 			Color blanc = C_new(200,200,255);
 			I_checker(img,rouge,blanc,50);
 		}
+		lp=new_listepoint();
+
+		lp = add_point(lp,0,0);
+		lp = add_point(lp,50,25);
+		lp = add_point(lp,100,100);
+		lp = add_point(lp,150,225);
+		lp = add_point(lp,200,400);
+		lp = add_point(lp,250,400);
+
+
 		int windowPosX = 100, windowPosY = 100;
 
 		glutInitWindowSize(largeur,hauteur);

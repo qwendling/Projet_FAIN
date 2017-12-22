@@ -1,6 +1,8 @@
 #ifndef LISTEPOINT_H
 #define LISTEPOINT_H
 
+#include "Image.h"
+
 typedef struct listepoint{
   int x;
   int y;
@@ -15,6 +17,6 @@ ListePoint delete_point(ListePoint,int,int);
 
 void free_liste(ListePoint);
 
-
+void draw_liste(ListePoint l,Image* img);
 
 #endif

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "ListePoint.h"
+#include "bresenham.h"
 
 ListePoint new_listepoint(){
   return NULL;
@@ -12,7 +13,9 @@ ListePoint add_point(ListePoint l,int x ,int y){
     new->y=y;
     return new;
   }
-  add_point(l->next,x,y);
+  if(l->x == x && l->y == y)
+    return l;
+  l->next = add_point(l->next,x,y);
   return l;
 }
 
@@ -32,4 +35,18 @@ void free_liste(ListePoint l){
     return;
   free_liste(l->next);
   free(l);
+}
+
+void draw_liste_aux(ListePoint l,ListePoint first,Image* img){
+  if(l==NULL || l->next == NULL || (l->x == first->x && l->y == first->y))
+    return;
+  I_bresenham(img,l->x,l->y,l->next->x,l->next->y);
+  draw_liste_aux(l->next,first,img);
+}
+
+void draw_liste(ListePoint l,Image* img){
+  if(l==NULL || l->next == NULL)
+    return;
+    I_bresenham(img,l->x,l->y,l->next->x,l->next->y);
+    draw_liste_aux(l->next,l,img);
 }
