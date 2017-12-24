@@ -48,13 +48,6 @@ void display_CB()
 	noir._green = 0;
 	noir._blue = 0;
 	I_fill(img,noir);
-	//I_bresenhamOrigin(img,100,100);
-	//I_bresenham(img,25,25,150,50);
-	//I_bresenham(img,25,25,150,150);
-	/*I_bresenham(img,150,150,0,0);
-	I_bresenham(img,50,150,25,25);*/
-
-	//draw_liste(lp,img,est_ferme);
 
 	p.draw(img,est_ferme);
 
@@ -78,7 +71,6 @@ void mouse_CB(int button, int state, int x, int y)
 	if((button==GLUT_LEFT_BUTTON)&&(state==GLUT_DOWN))
 		I_focusPoint(img,x,img->_height-y);
 	if((button==GLUT_LEFT_BUTTON)&&(state==GLUT_DOWN)){
-		//lp = add_point(lp,x,_HauteurImg-y);
 		p.add_point(x,_HauteurImg-y);
 	}
 	glutPostRedisplay();
@@ -160,15 +152,10 @@ int main(int argc, char **argv)
 
 		p.add_point(0,0);
 		p.add_point(50,25);
-
-		/*lp=new_listepoint();
-
-		lp = add_point(lp,0,0);
-		lp = add_point(lp,50,25);
-		lp = add_point(lp,100,100);
-		lp = add_point(lp,150,225);
-		lp = add_point(lp,200,400);
-		lp = add_point(lp,250,400);*/
+		p.add_point(100,100);
+		p.add_point(150,225);
+		p.add_point(200,400);
+		p.add_point(250,400);
 
 
 		int windowPosX = 100, windowPosY = 100;
