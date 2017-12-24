@@ -18,10 +18,11 @@
 
 #include "Image.h"
 #include "bresenham.h"
-#include "ListePoint.h"
+#include "Polygone.h"
 
 Image *img;
-ListePoint lp;
+//ListePoint lp;
+Polygone p;
 int _HauteurImg;
 bool est_ferme = false;
 
@@ -53,7 +54,9 @@ void display_CB()
 	/*I_bresenham(img,150,150,0,0);
 	I_bresenham(img,50,150,25,25);*/
 
-	draw_liste(lp,img,est_ferme);
+	//draw_liste(lp,img,est_ferme);
+
+	p.draw(img,est_ferme);
 
 	I_draw(img);
 
@@ -75,7 +78,8 @@ void mouse_CB(int button, int state, int x, int y)
 	if((button==GLUT_LEFT_BUTTON)&&(state==GLUT_DOWN))
 		I_focusPoint(img,x,img->_height-y);
 	if((button==GLUT_LEFT_BUTTON)&&(state==GLUT_DOWN)){
-		lp = add_point(lp,x,_HauteurImg-y);
+		//lp = add_point(lp,x,_HauteurImg-y);
+		p.add_point(x,_HauteurImg-y);
 	}
 	glutPostRedisplay();
 }
@@ -154,14 +158,17 @@ int main(int argc, char **argv)
 
 		_HauteurImg = img->_height;
 
-		lp=new_listepoint();
+		p.add_point(0,0);
+		p.add_point(50,25);
+
+		/*lp=new_listepoint();
 
 		lp = add_point(lp,0,0);
 		lp = add_point(lp,50,25);
 		lp = add_point(lp,100,100);
 		lp = add_point(lp,150,225);
 		lp = add_point(lp,200,400);
-		lp = add_point(lp,250,400);
+		lp = add_point(lp,250,400);*/
 
 
 		int windowPosX = 100, windowPosY = 100;

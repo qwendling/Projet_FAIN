@@ -1,8 +1,8 @@
 
 
-CC=gcc
+CC=g++
 
-CFLAGS=-Wall
+CFLAGS= -std=c++11
 LFLAGS=-L/usr/lib -lm -lGL -lglut
 
 EXEC=plot
@@ -14,6 +14,7 @@ $(EXEC) : $(OBJS)
 
 %.o : %.c
 	$(CC) -c $^ -o $@ $(CFLAGS)
+
 
 clean :
 	/bin/rm $(EXEC) *.o
