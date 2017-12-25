@@ -160,7 +160,7 @@ int main(int argc, char **argv)
 		p.add_point(100,100);
 		p.add_point(150,225);
 		p.add_point(200,400);
-		p.add_point(250,400);
+		p.add_point(250,410);
 
 
 		int windowPosX = 100, windowPosY = 100;

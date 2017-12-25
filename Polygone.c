@@ -45,6 +45,13 @@ bool compareAreteInters(const Arete& a1,const Arete& a2){
 }
 
 void Polygone::fill(Image* img){
+  Color blanc;
+	blanc._red = 255;
+	blanc._green = 255;
+	blanc._blue = 255;
+	I_changeColor(img,blanc);
+
+
   std::vector<Arete> TA;
   std::list<Point>::iterator it;
   Point p1,p2;
@@ -66,31 +73,46 @@ void Polygone::fill(Image* img){
   int indx_prochaine_arete = 0;
   Arete prochaine_arete = TA[0];
   int prochain_ymin = prochaine_arete.Pmin.y;
-  std::list<Arete> TAA;
+  //std::list<Arete> TAA;
+  std::vector<Arete> TAA;
 
 
   for(int y = this->Ymin;y < this->Ymax;y++){
     std::cout << "ymin : " << this->Ymin << "ymax : " << this->Ymax << std::endl;
     std::cout << y << std::endl;
-    while(y>=prochain_ymin){
-
+    while(y>=prochain_ymin && indx_prochaine_arete < TA.size()){
       prochaine_arete.x_inters = prochaine_arete.Pmin.x;
       prochaine_arete.inc=0;
       std::cout << "prochaine_arete id : "<< indx_prochaine_arete <<" ymax : " << prochaine_arete.Pmax.y << "ymin : " << prochaine_arete.Pmin.y << std::endl;
       TAA.push_back(prochaine_arete);
-      //std::sort(TAA.begin(),TAA.end(),compareAreteInters);
-      TAA.sort(compareAreteInters);
+      //TAA.sort(compareAreteInters);
+      std::sort(TAA.begin(),TAA.end(),compareAreteInters);
       indx_prochaine_arete++;
       prochaine_arete = TA[indx_prochaine_arete];
       prochain_ymin = prochaine_arete.Pmin.y;
     }
     std::cout << "fin premier while" << std::endl;
 
-    TAA.remove_if([&y](Arete& a){return a.Pmax.y == y;});
+    TAA.erase(std::remove_if(TAA.begin(),TAA.end(),[&y](Arete& a){return a.Pmax.y == y;}),TAA.end());
+    std::cout << "remove done" << std::endl;
+    std::vector<Arete>::iterator it_TAA;
+    for(it_TAA = TAA.begin();it_TAA!=TAA.end();it_TAA++){
+      std::cout << "remove ymax : " << (*it_TAA).Pmax.y << "ymin : " << (*it_TAA).Pmin.y << std::endl;
+    }
 
+    /*TAA.remove_if([&y](Arete& a){return a.Pmax.y == y;});
     std::list<Arete>::iterator it_TAA;
     for(it_TAA = TAA.begin();it_TAA!=TAA.end();it_TAA++){
-      std::cout << "ymax : " << (*it_TAA).Pmax.y << "ymin : " << (*it_TAA).Pmin.y << std::endl;
+      std::cout << "ymax : " << (*it_TAA).Pmax.y << "ymin : " << (*it_TAA).Pmin.y << "x_inters : " << (*it_TAA).x_inters << std::endl;
+    }*/
+    int N = TAA.size()/2;
+    for(int i=0;i < N;i++){
+      //Normalement on colorie ici
+      Arete A2i = TAA[2*i];
+      Arete A2i1 = TAA[2*i+1];
+      for(int x=A2i.x_inters;x<A2i1.x_inters;x++){
+        I_plot(img,x,y);
+      }
     }
   }
 
