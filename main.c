@@ -24,7 +24,7 @@ Image *img;
 //ListePoint lp;
 Polygone p;
 int _HauteurImg;
-bool est_ferme = false;
+bool est_ferme = false,est_fill=false;
 
 
 int compareColor(Color c1,Color c2){
@@ -50,6 +50,10 @@ void display_CB()
 	I_fill(img,noir);
 
 	p.draw(img,est_ferme);
+
+	if(est_fill){
+		p.fill(img);
+	}
 
 	I_draw(img);
 
@@ -91,6 +95,7 @@ void keyboard_CB(unsigned char key, int x, int y)
 	case 'Z' : I_zoom(img,0.5); break;
 	case 'i' : I_zoomInit(img); break;
 	case 'c' : est_ferme = !est_ferme; break;
+	case 'f' : est_fill = !est_fill; break;
 	default : fprintf(stderr,"keyboard_CB : %d : unknown key.\n",key);
 	}
 	glutPostRedisplay();
@@ -150,7 +155,7 @@ int main(int argc, char **argv)
 
 		_HauteurImg = img->_height;
 
-		p.add_point(0,0);
+		p.add_point(10,10);
 		p.add_point(50,25);
 		p.add_point(100,100);
 		p.add_point(150,225);
