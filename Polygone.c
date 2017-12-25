@@ -65,11 +65,6 @@ void Polygone::fill(Image* img){
   TA.push_back(Arete(p1,p2));
   std::sort(TA.begin(),TA.end(),sort_arete_ymin);
 
-  std::vector<Arete>::iterator it_TA;
-  for(it_TA = TA.begin();it_TA!=TA.end();it_TA++){
-    std::cout << "ymax : " << (*it_TA).Pmax.y << "ymin : " << (*it_TA).Pmin.y << std::endl;
-  }
-
   int indx_prochaine_arete = 0;
   Arete prochaine_arete = TA[0];
   int prochain_ymin = prochaine_arete.Pmin.y;
@@ -78,27 +73,19 @@ void Polygone::fill(Image* img){
 
 
   for(int y = this->Ymin;y < this->Ymax;y++){
-    std::cout << "ymin : " << this->Ymin << "ymax : " << this->Ymax << std::endl;
-    std::cout << y << std::endl;
     while(y>=prochain_ymin && indx_prochaine_arete < TA.size()){
       prochaine_arete.x_inters = prochaine_arete.Pmin.x;
       prochaine_arete.inc=0;
-      std::cout << "prochaine_arete id : "<< indx_prochaine_arete <<" ymax : " << prochaine_arete.Pmax.y << "ymin : " << prochaine_arete.Pmin.y << std::endl;
       TAA.push_back(prochaine_arete);
       //TAA.sort(compareAreteInters);
-      std::sort(TAA.begin(),TAA.end(),compareAreteInters);
+      //std::sort(TAA.begin(),TAA.end(),compareAreteInters);
       indx_prochaine_arete++;
       prochaine_arete = TA[indx_prochaine_arete];
       prochain_ymin = prochaine_arete.Pmin.y;
     }
-    std::cout << "fin premier while" << std::endl;
 
     TAA.erase(std::remove_if(TAA.begin(),TAA.end(),[&y](Arete& a){return a.Pmax.y == y;}),TAA.end());
-    std::cout << "remove done" << std::endl;
-    std::vector<Arete>::iterator it_TAA;
-    for(it_TAA = TAA.begin();it_TAA!=TAA.end();it_TAA++){
-      std::cout << "remove ymax : " << (*it_TAA).Pmax.y << "ymin : " << (*it_TAA).Pmin.y << std::endl;
-    }
+    std::sort(TAA.begin(),TAA.end(),compareAreteInters);
 
     /*TAA.remove_if([&y](Arete& a){return a.Pmax.y == y;});
     std::list<Arete>::iterator it_TAA;
@@ -114,6 +101,22 @@ void Polygone::fill(Image* img){
         I_plot(img,x,y);
       }
     }
+    std::vector<Arete>::iterator it_A;
+    for(it_A = TAA.begin();it_A!=TAA.end();it_A++){
+      //std::cout << "AH ! " << std::endl;
+      int dx = (*it_A).Pmax.x-(*it_A).Pmin.x;
+      int dy = (*it_A).Pmax.y-(*it_A).Pmin.y;
+      (*it_A).inc=(*it_A).inc + dx;
+      while((*it_A).inc > dy){
+        (*it_A).inc=(*it_A).inc-dy;
+        (*it_A).x_inters++;
+      }
+      while((*it_A).inc < -dy){
+        (*it_A).inc=(*it_A).inc+dy;
+        (*it_A).x_inters--;
+      }
+    }
+
   }
 
 
