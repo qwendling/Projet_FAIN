@@ -12,12 +12,16 @@ Polygone::Polygone() : est_ferme(false),
   Ymax(0),
   Ymin(std::numeric_limits<int>::max()){
     it_curPoint=liste_points.end();
+    it_curEdge=liste_points.end();
   }
 
 void Polygone::add_point(int x,int y){
   liste_points.push_back(Point(x,y));
   if(it_curPoint==liste_points.end()){
     it_curPoint = liste_points.begin();
+  }
+  if(it_curEdge==liste_points.end()){
+    it_curEdge = liste_points.begin();
   }
   if(x>Xmax)
     Xmax=x;
@@ -30,17 +34,21 @@ void Polygone::add_point(int x,int y){
 }
 
 void Polygone::draw(Image* img){
+  Color blanc;
+	blanc._red = 255;
+	blanc._green = 255;
+	blanc._blue = 255;
   std::list<Point>::iterator it;
   Point p1,p2;
   for(it=this->liste_points.begin();std::next(it)!=this->liste_points.end();++it){
     p1=*it;
     p2=*std::next(it);
-    I_bresenham(img,p1.x,p1.y,p2.x,p2.y);
+    I_bresenham(img,p1.x,p1.y,p2.x,p2.y,blanc);
   }
   if(est_ferme){
     p1=*(this->liste_points.begin());
     p2=*(std::prev(this->liste_points.end()));
-    I_bresenham(img,p1.x,p1.y,p2.x,p2.y);
+    I_bresenham(img,p1.x,p1.y,p2.x,p2.y,blanc);
   }
 }
 
@@ -198,4 +206,67 @@ void Polygone::move_vertex(Image* img,int dx,int dy){
     }
   }
 
+}
+
+void Polygone::reset_edge(){
+  it_curEdge = liste_points.begin();
+}
+
+void Polygone::show_activeEdge(Image* img){
+  if(it_curEdge == liste_points.end())
+    return;
+  std::list<Point>::iterator it_p2 = std::next(it_curEdge);
+  if(it_p2 == liste_points.end()){
+    if(!est_ferme){
+      return;
+    }
+    it_p2=liste_points.begin();
+  }
+  Color c;
+	c._red = 255;
+	c._green = 0;
+	c._blue = 0;
+  I_bresenham(img,it_curEdge->x,it_curEdge->y,it_p2->x,it_p2->y,c);
+}
+
+void Polygone::next_edge(){
+  if(it_curEdge == liste_points.end()){
+    return;
+  }
+  it_curEdge++;
+  if(it_curEdge == liste_points.end()){
+    it_curEdge=liste_points.begin();
+  }
+  if(it_curEdge == std::prev(liste_points.end()) && !est_ferme){
+    it_curEdge=liste_points.begin();
+  }
+}
+
+void Polygone::prev_edge(){
+  if(it_curEdge == liste_points.end()){
+    return;
+  }
+  if(it_curEdge == liste_points.begin()){
+    if(est_ferme){
+      it_curEdge = std::prev(liste_points.end());
+    }else{
+      it_curEdge = std::prev(std::prev(liste_points.end()));
+    }
+    return;
+  }
+  it_curEdge--;
+}
+
+void Polygone::split_activeEdge(){
+  if(it_curEdge == liste_points.end())
+    return;
+  std::list<Point>::iterator it_p2 = std::next(it_curEdge);
+  if(it_p2 == liste_points.end()){
+    if(!est_ferme){
+      return;
+    }
+    it_p2=liste_points.begin();
+  }
+  Point next_pts((it_curEdge->x+it_p2->x)/2,(it_curEdge->y+it_p2->y)/2);
+  liste_points.insert(it_p2,next_pts);
 }

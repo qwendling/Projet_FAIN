@@ -76,12 +76,8 @@ void O1toZ2(int xA,int yA,int xB,int yB,int* x,int* y){
 	*y += yA;
 }
 
-void I_bresenham(Image* img, int xA, int yA, int xB, int yB){
-	Color blanc;
-	blanc._red = 255;
-	blanc._green = 255;
-	blanc._blue = 255;
-	I_changeColor(img,blanc);
+void I_bresenham(Image* img, int xA, int yA, int xB, int yB,Color c){
+	I_changeColor(img,c);
 
 	int OxA,OyA,OxB,OyB;
 

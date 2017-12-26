@@ -5,7 +5,7 @@
 
 void I_bresenhamOrigin(Image *img,int x,int y);
 
-void I_bresenham(Image* img, int xA, int yA, int xB, int yB);
+void I_bresenham(Image* img, int xA, int yA, int xB, int yB,Color c);
 
 
 #endif

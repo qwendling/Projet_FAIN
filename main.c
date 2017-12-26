@@ -67,6 +67,10 @@ void display_CB()
 		p.show_activeVertex(img);
 	}
 
+	if(cur_mode==edge){
+		p.show_activeEdge(img);
+	}
+
 	I_draw(img);
 
 
@@ -90,6 +94,9 @@ void mouse_CB(int button, int state, int x, int y)
 	if((button==GLUT_LEFT_BUTTON)&&(state==GLUT_DOWN)&&(cur_mode==append)){
 		p.add_point(x,_HauteurImg-y);
 	}
+	if((button==GLUT_MIDDLE_BUTTON)&&(state==GLUT_DOWN)&&(cur_mode==edge)){
+		p.split_activeEdge();
+	}
 	glutPostRedisplay();
 }
 
@@ -111,7 +118,7 @@ void keyboard_CB(unsigned char key, int x, int y)
 	case 'f' : est_fill = !est_fill; break;
 	case 'a' : cur_mode = append;break;
 	case 'v' : cur_mode = vertex;break;
-	case 'e' : cur_mode = edge;break;
+	case 'e' : cur_mode = edge;p.reset_edge();break;
 	case 127 : if(cur_mode == vertex){
 			p.supr_activeVertex();
 		}
@@ -143,8 +150,14 @@ void special_CB(int key, int x, int y)
 		if(cur_mode==vertex){p.move_vertex(img,-1,0);break;}I_move(img,d,0); break;
 	case GLUT_KEY_RIGHT :
 		if(cur_mode==vertex){p.move_vertex(img,1,0);break;}I_move(img,-d,0); break;
-	case GLUT_KEY_PAGE_UP : if(cur_mode==vertex){p.next_vertex();}break;
-	case GLUT_KEY_PAGE_DOWN : if(cur_mode==vertex){p.prev_vertex();}break;
+	case GLUT_KEY_PAGE_UP :
+		if(cur_mode==vertex){p.next_vertex();}
+		if(cur_mode==edge){p.next_edge();}
+		break;
+	case GLUT_KEY_PAGE_DOWN :
+		if(cur_mode==vertex){p.prev_vertex();}
+		if(cur_mode==edge){p.prev_edge();}
+		break;
 	default : fprintf(stderr,"special_CB : %d : unknown key.\n",key);
 	}
 	glutPostRedisplay();
