@@ -135,10 +135,14 @@ void special_CB(int key, int x, int y)
 
 	switch(key)
 	{
-	case GLUT_KEY_UP    : I_move(img,0,d); break;
-	case GLUT_KEY_DOWN  : I_move(img,0,-d); break;
-	case GLUT_KEY_LEFT  : I_move(img,d,0); break;
-	case GLUT_KEY_RIGHT : I_move(img,-d,0); break;
+	case GLUT_KEY_UP    :
+		if(cur_mode==vertex){p.move_vertex(img,0,1);break;}I_move(img,0,d); break;
+	case GLUT_KEY_DOWN  :
+		if(cur_mode==vertex){p.move_vertex(img,0,-1);break;}I_move(img,0,-d); break;
+	case GLUT_KEY_LEFT  :
+		if(cur_mode==vertex){p.move_vertex(img,-1,0);break;}I_move(img,d,0); break;
+	case GLUT_KEY_RIGHT :
+		if(cur_mode==vertex){p.move_vertex(img,1,0);break;}I_move(img,-d,0); break;
 	case GLUT_KEY_PAGE_UP : if(cur_mode==vertex){p.next_vertex();}break;
 	case GLUT_KEY_PAGE_DOWN : if(cur_mode==vertex){p.prev_vertex();}break;
 	default : fprintf(stderr,"special_CB : %d : unknown key.\n",key);

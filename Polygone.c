@@ -174,3 +174,28 @@ void Polygone::prev_vertex(){
   }
   it_curPoint--;
 }
+
+void Polygone::move_vertex(Image* img,int dx,int dy){
+  if(it_curPoint == liste_points.end()){
+    return;
+  }
+  if(it_curPoint->x+dx>0 && it_curPoint->x+dx < img->_width){
+    it_curPoint->x += dx;
+    if(it_curPoint->x>Xmax){
+      Xmax = it_curPoint->x;
+    }
+    if(it_curPoint->x<Xmin){
+      Xmin = it_curPoint->x;
+    }
+  }
+  if(it_curPoint->y+dy>0 && it_curPoint->y+dy < img->_height){
+    it_curPoint->y +=dy;
+    if(it_curPoint->y>Ymax){
+      Ymax = it_curPoint->y;
+    }
+    if(it_curPoint->y<Ymin){
+      Ymin = it_curPoint->y;
+    }
+  }
+
+}

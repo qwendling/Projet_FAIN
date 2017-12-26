@@ -51,6 +51,7 @@ public:
   void supr_activeVertex();
   void next_vertex();
   void prev_vertex();
+  void move_vertex(Image*,int,int);
 };
 
 #endif
