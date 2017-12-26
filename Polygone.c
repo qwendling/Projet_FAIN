@@ -5,8 +5,20 @@
 #include <iostream>
 #include <algorithm>
 
+Polygone::Polygone() : est_ferme(false),
+  liste_points(),
+  Xmin(std::numeric_limits<int>::max()),
+  Xmax(0),
+  Ymax(0),
+  Ymin(std::numeric_limits<int>::max()){
+    it_curPoint=liste_points.end();
+  }
+
 void Polygone::add_point(int x,int y){
   liste_points.push_back(Point(x,y));
+  if(it_curPoint==liste_points.end()){
+    it_curPoint = liste_points.begin();
+  }
   if(x>Xmax)
     Xmax=x;
   if(x<Xmin)
@@ -17,7 +29,7 @@ void Polygone::add_point(int x,int y){
     Ymin=y;
 }
 
-void Polygone::draw(Image* img,bool ferme){
+void Polygone::draw(Image* img){
   std::list<Point>::iterator it;
   Point p1,p2;
   for(it=this->liste_points.begin();std::next(it)!=this->liste_points.end();++it){
@@ -25,7 +37,7 @@ void Polygone::draw(Image* img,bool ferme){
     p2=*std::next(it);
     I_bresenham(img,p1.x,p1.y,p2.x,p2.y);
   }
-  if(ferme){
+  if(est_ferme){
     p1=*(this->liste_points.begin());
     p2=*(std::prev(this->liste_points.end()));
     I_bresenham(img,p1.x,p1.y,p2.x,p2.y);
@@ -68,7 +80,6 @@ void Polygone::fill(Image* img){
   int indx_prochaine_arete = 0;
   Arete prochaine_arete = TA[0];
   int prochain_ymin = prochaine_arete.Pmin.y;
-  //std::list<Arete> TAA;
   std::vector<Arete> TAA;
 
 
@@ -77,8 +88,6 @@ void Polygone::fill(Image* img){
       prochaine_arete.x_inters = prochaine_arete.Pmin.x;
       prochaine_arete.inc=0;
       TAA.push_back(prochaine_arete);
-      //TAA.sort(compareAreteInters);
-      //std::sort(TAA.begin(),TAA.end(),compareAreteInters);
       indx_prochaine_arete++;
       prochaine_arete = TA[indx_prochaine_arete];
       prochain_ymin = prochaine_arete.Pmin.y;
@@ -87,14 +96,8 @@ void Polygone::fill(Image* img){
     TAA.erase(std::remove_if(TAA.begin(),TAA.end(),[&y](Arete& a){return a.Pmax.y == y;}),TAA.end());
     std::sort(TAA.begin(),TAA.end(),compareAreteInters);
 
-    /*TAA.remove_if([&y](Arete& a){return a.Pmax.y == y;});
-    std::list<Arete>::iterator it_TAA;
-    for(it_TAA = TAA.begin();it_TAA!=TAA.end();it_TAA++){
-      std::cout << "ymax : " << (*it_TAA).Pmax.y << "ymin : " << (*it_TAA).Pmin.y << "x_inters : " << (*it_TAA).x_inters << std::endl;
-    }*/
     int N = TAA.size()/2;
     for(int i=0;i < N;i++){
-      //Normalement on colorie ici
       Arete A2i = TAA[2*i];
       Arete A2i1 = TAA[2*i+1];
       for(int x=A2i.x_inters;x<A2i1.x_inters;x++){
@@ -103,7 +106,6 @@ void Polygone::fill(Image* img){
     }
     std::vector<Arete>::iterator it_A;
     for(it_A = TAA.begin();it_A!=TAA.end();it_A++){
-      //std::cout << "AH ! " << std::endl;
       int dx = (*it_A).Pmax.x-(*it_A).Pmin.x;
       int dy = (*it_A).Pmax.y-(*it_A).Pmin.y;
       (*it_A).inc=(*it_A).inc + dx;
@@ -118,6 +120,57 @@ void Polygone::fill(Image* img){
     }
 
   }
+}
 
 
+void Polygone::show_activeVertex(Image* img){
+  if(it_curPoint == liste_points.end())
+    return;
+  Color blanc;
+  blanc._red = 255;
+	blanc._green = 0;
+	blanc._blue = 0;
+	I_changeColor(img,blanc);
+  Point activeVertex = *it_curPoint;
+  for(int i=-2;i<=2;i++){
+    for(int j=-2;j<=2;j++){
+      if(i==j && i==0){
+        continue;
+      }
+      if(activeVertex.x+i > img->_width || activeVertex.x+i < 0 || activeVertex.y+j > img->_height || activeVertex.y+j < 0)
+        continue;
+      I_plot(img,activeVertex.x+i,activeVertex.y+j);
+    }
+  }
+}
+
+void Polygone::supr_activeVertex(){
+  if(it_curPoint == liste_points.end()){
+    return;
+  }
+  liste_points.erase(it_curPoint++);
+  if(it_curPoint == liste_points.end()){
+    it_curPoint--;
+  }
+}
+
+void Polygone::next_vertex(){
+  if(it_curPoint == liste_points.end()){
+    return;
+  }
+  it_curPoint++;
+  if(it_curPoint == liste_points.end()){
+    it_curPoint=liste_points.begin();
+  }
+}
+
+void Polygone::prev_vertex(){
+  if(it_curPoint == liste_points.end()){
+    return;
+  }
+  if(it_curPoint == liste_points.begin()){
+    it_curPoint = std::prev(liste_points.end());
+    return;
+  }
+  it_curPoint--;
 }

@@ -38,12 +38,19 @@ public:
   int Xmax;
   int Ymin;
   int Ymax;
+  bool est_ferme;
   std::list<Point> liste_points;
-  Polygone() : liste_points(),Xmin(std::numeric_limits<int>::max()),Xmax(0),Ymax(0),Ymin(std::numeric_limits<int>::max()){}
+  std::list<Point>::iterator it_curPoint;
+  Polygone();
   void add_point(int x,int y);
-  void draw(Image*,bool);
+  void draw(Image*);
   void fill(Image*);
-
+  void fermer(){est_ferme=!est_ferme;}
+  bool get_estFeme(){return est_ferme;}
+  void show_activeVertex(Image*);
+  void supr_activeVertex();
+  void next_vertex();
+  void prev_vertex();
 };
 
 #endif

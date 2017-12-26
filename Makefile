@@ -12,8 +12,8 @@ OBJS=$(SRCS:.c=.o)
 $(EXEC) : $(OBJS)
 	$(CC) $^ -o $@ $(LFLAGS)
 
-%.o : %.c
-	$(CC) -c $^ -o $@ $(CFLAGS)
+%.o : %.c %.h
+	$(CC) -c $< -o $@ $(CFLAGS)
 
 
 clean :

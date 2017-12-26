@@ -20,11 +20,19 @@
 #include "bresenham.h"
 #include "Polygone.h"
 
+typedef enum{
+	append,
+	vertex,
+	edge,
+} mode;
+
+
+mode cur_mode = append;
 Image *img;
 //ListePoint lp;
 Polygone p;
 int _HauteurImg;
-bool est_ferme = false,est_fill=false;
+bool est_fill=false;
 
 
 int compareColor(Color c1,Color c2){
@@ -49,13 +57,18 @@ void display_CB()
 	noir._blue = 0;
 	I_fill(img,noir);
 
-	p.draw(img,est_ferme);
+	p.draw(img);
 
 	if(est_fill){
 		p.fill(img);
 	}
 
+	if(cur_mode==vertex){
+		p.show_activeVertex(img);
+	}
+
 	I_draw(img);
+
 
     glutSwapBuffers();
 }
@@ -74,7 +87,7 @@ void mouse_CB(int button, int state, int x, int y)
 {
 	if((button==GLUT_LEFT_BUTTON)&&(state==GLUT_DOWN))
 		I_focusPoint(img,x,img->_height-y);
-	if((button==GLUT_LEFT_BUTTON)&&(state==GLUT_DOWN)){
+	if((button==GLUT_LEFT_BUTTON)&&(state==GLUT_DOWN)&&(cur_mode==append)){
 		p.add_point(x,_HauteurImg-y);
 	}
 	glutPostRedisplay();
@@ -87,15 +100,22 @@ void mouse_CB(int button, int state, int x, int y)
 
 void keyboard_CB(unsigned char key, int x, int y)
 {
-	// fprintf(stderr,"key=%d\n",key);
+	//fprintf(stderr,"key=%c\n",key);
 	switch(key)
 	{
 	case 27 : exit(1); break;
 	case 'z' : I_zoom(img,2.0); break;
 	case 'Z' : I_zoom(img,0.5); break;
 	case 'i' : I_zoomInit(img); break;
-	case 'c' : est_ferme = !est_ferme; break;
+	case 'c' : p.fermer(); break;
 	case 'f' : est_fill = !est_fill; break;
+	case 'a' : cur_mode = append;break;
+	case 'v' : cur_mode = vertex;break;
+	case 'e' : cur_mode = edge;break;
+	case 127 : if(cur_mode == vertex){
+			p.supr_activeVertex();
+		}
+		break;
 	default : fprintf(stderr,"keyboard_CB : %d : unknown key.\n",key);
 	}
 	glutPostRedisplay();
@@ -119,6 +139,8 @@ void special_CB(int key, int x, int y)
 	case GLUT_KEY_DOWN  : I_move(img,0,-d); break;
 	case GLUT_KEY_LEFT  : I_move(img,d,0); break;
 	case GLUT_KEY_RIGHT : I_move(img,-d,0); break;
+	case GLUT_KEY_PAGE_UP : if(cur_mode==vertex){p.next_vertex();}break;
+	case GLUT_KEY_PAGE_DOWN : if(cur_mode==vertex){p.prev_vertex();}break;
 	default : fprintf(stderr,"special_CB : %d : unknown key.\n",key);
 	}
 	glutPostRedisplay();
