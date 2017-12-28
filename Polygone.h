@@ -12,6 +12,7 @@ public:
   Point() : x(0),y(0){}
   Point(int _x,int _y) : x(_x),y(_y){}
   Point(const Point& p) : x(p.x),y(p.y){}
+  bool operator==(const Point& p)const{return p.x==this->x && p.y == this->y;}
 };
 
 class Arete{
@@ -30,6 +31,16 @@ public:
     Pmin = p2;
     Pmax = p1;
   }
+};
+
+class foncteur_nearestPoint{
+public:
+  Point nearestPoint;
+  int carre_distance;
+  Point compare_Point;
+  foncteur_nearestPoint() : carre_distance(std::numeric_limits<int>::max()){}
+  foncteur_nearestPoint(const Point& p) : compare_Point(p),carre_distance(std::numeric_limits<int>::max()){}
+  void operator()(const Point& p);
 };
 
 class Polygone{
@@ -60,6 +71,8 @@ public:
   void next_edge();
   void prev_edge();
   void split_activeEdge();
+
+  void set_nearestPoint(int x,int y);
 };
 
 #endif

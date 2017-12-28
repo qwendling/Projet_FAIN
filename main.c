@@ -94,6 +94,9 @@ void mouse_CB(int button, int state, int x, int y)
 	if((button==GLUT_LEFT_BUTTON)&&(state==GLUT_DOWN)&&(cur_mode==append)){
 		p.add_point(x,_HauteurImg-y);
 	}
+	if((button==GLUT_LEFT_BUTTON)&&(state==GLUT_DOWN)&&(cur_mode==vertex)){
+		p.set_nearestPoint(x,_HauteurImg-y);
+	}
 	if((button==GLUT_MIDDLE_BUTTON)&&(state==GLUT_DOWN)&&(cur_mode==edge)){
 		p.split_activeEdge();
 	}
