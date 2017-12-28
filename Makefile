@@ -6,13 +6,13 @@ CFLAGS= -std=c++11
 LFLAGS=-L/usr/lib -lm -lGL -lglut
 
 EXEC=plot
-SRCS=$(wildcard *.c)
-OBJS=$(SRCS:.c=.o)
+SRCS=$(wildcard *.cpp)
+OBJS=$(SRCS:.cpp=.o)
 
 $(EXEC) : $(OBJS)
 	$(CC) $^ -o $@ $(LFLAGS)
 
-%.o : %.c %.h
+%.o : %.cpp %.h
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 
