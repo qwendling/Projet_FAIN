@@ -9,6 +9,8 @@ public:
   Point(int _x,int _y) : x(_x),y(_y){}
   Point(const Point& p) : x(p.x),y(p.y){}
   bool operator==(const Point& p)const{return p.x==this->x && p.y == this->y;}
+  Point operator+(const Point& p)const{return Point(x+p.x,y+p.y);}
+  Point operator-(const Point& p)const{return Point(x-p.x,y-p.y);}
 };
 
 #endif

@@ -37,6 +37,7 @@ public:
   void split_activeEdge();
 
   void set_nearestPoint(int x,int y);
+  void set_nearestArete(int x,int y);
 };
 
 #endif

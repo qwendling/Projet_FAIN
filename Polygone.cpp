@@ -2,6 +2,7 @@
 #include "Polygone.h"
 #include "bresenham.h"
 #include "foncteur_nearestPoint.h"
+#include "Arete_distance.h"
 #include <iterator>
 #include <iostream>
 #include <algorithm>
@@ -278,4 +279,31 @@ void Polygone::set_nearestPoint(int x,int y){
   foncteur_nearestPoint f(Point(x,y));
   f=std::for_each(liste_points.begin(),liste_points.end(),f);
   it_curPoint = std::find(liste_points.begin(),liste_points.end(),f.nearestPoint);
+}
+
+void Polygone::set_nearestArete(int x,int y){
+  std::vector<Arete_distance> TA;
+  std::list<Point>::iterator it;
+  Point p1,p2;
+  for(it=this->liste_points.begin();std::next(it)!=this->liste_points.end();++it){
+    p1=*it;
+    p2=*std::next(it);
+    TA.push_back(Arete_distance(p1,p2));
+  }
+  if(est_ferme){
+    p2=*(this->liste_points.begin());
+    p1=*(std::prev(this->liste_points.end()));
+    TA.push_back(Arete_distance(p1,p2));
+  }
+
+  std::vector<Arete_distance>::iterator it_TA = TA.begin();
+  Arete_distance a_min;
+  for(;it_TA!=TA.end();++it_TA){
+    it_TA->calcul_distance(Point(x,y));
+    if(*it_TA < a_min){
+      a_min = *it_TA;
+    }
+  }
+  it_curEdge = std::find(liste_points.begin(),liste_points.end(),a_min.A);
+
 }
