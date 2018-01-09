@@ -200,13 +200,6 @@ int main(int argc, char **argv)
 
 		_HauteurImg = img->_height;
 
-		p.add_point(10,10);
-		p.add_point(50,25);
-		p.add_point(100,100);
-		p.add_point(150,225);
-		p.add_point(200,400);
-		p.add_point(250,410);
-
 
 		int windowPosX = 100, windowPosY = 100;
 
