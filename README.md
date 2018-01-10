@@ -1,2 +1,27 @@
 # Projet_FAIN
-Projet de FAIN automne 2017 WENDLING Quentin
+---------
+WENDLING Quentin
+## Fonctionnement : 
+
+* Lancement du programme :</br>
+  La compilation du code ce fais avec la commande <pre><code>make</code></pre>
+  Une fois le code compilé le programme se lance avec la commande : <pre><code>./plot [width][height] </code></pre> 
+* Choix du mode :
+  Le programme offre différents mode d'intéraction.</br> 
+  Le choix du mode se fais avec les commandes : </br>
+  * 'a' mode append 
+  * 'v' mode vertex
+  * 'e' mode edge
+* Mode append :
+  Permet les intéractions de base avec le polygone :
+  * click gauche : Création d'un nouveau sommets lié avec le dernier sommet créé
+  * 'c' : Fermeture/ouverture du polygone
+  * 'f' : Remplissage du polygone  
+* Mode Vertex :
+  Permet les intéractions avec les sommets : 
+  * 'page suivante' : selection du point suivant
+  * 'page précédente' : selection du point précédent
+  * touche haut,bas,droite,gauche : déplacement du point courant
+  * 'suppr' : supprésion du point courant
+* Mode Edge :
+  Permet les intéractions avec les aretes :
