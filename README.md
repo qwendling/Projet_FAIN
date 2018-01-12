@@ -39,3 +39,10 @@ WENDLING Quentin
   ![select edge](/edge.png)
   * click du milieu : coupe l'arete courante en ajoutant un sommet entre les extrémités
   ![cropping edge](/edge_crop.png)
+
+## Details d'implémentation :
+
+### Scan Line :
+  L'algorithme de remplissage repose sur deux principe : 
+  * La cohérence horizontale, on calcule pour tout les Y de l'image (les lignes horizontales) les points d'intersection avec les arêtes du polygone et on affiche les pixels entre les couples de points d'intersection (les points sont triés dans l'ordre croissant en fonction de leurs abscisses)
+  * La cohérence verticale, comme d'une ligne a l'autre les intersections risque de ne pas beaucoup changer, en pratique, on va intersecté une nouvelle arête uniquement après être passé par son sommet d'ordonnée la plus basse, on tient donc à jour une liste d'arêtes avec l'abscisse de leurs points d'intersection et con calcul l'abscisse suivante avec une méthode similaire à bresemham .
